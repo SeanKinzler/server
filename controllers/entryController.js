@@ -1,4 +1,5 @@
 var fs = require('fs');
+var writeFile = require('write');
 var multiparty = require('multiparty');
 
 var db = require('../models/Database.js');
@@ -28,7 +29,7 @@ module.exports = {
             if (err) {
               reject(err)
             }
-            fs.writeFile(filepath, data, function(err, data) {
+            writeFile(filepath, data, function(err, data) {
               if (err) {
                 reject(err);
               }
@@ -53,7 +54,7 @@ module.exports = {
     .catch((err) => {
       res.status(500).json(err);
     })
-    
+
   },
 
   getEntries: function(req, res, next) {
