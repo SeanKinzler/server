@@ -27,7 +27,8 @@
     "pg": "^6.1.0",
     "pg-hstore": "^2.3.2",
     "pg-native": "^1.10.0",
-    "sequelize": "^3.24.1"
+    "sequelize": "^3.24.1",
+    "write": "^0.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.10.2"
