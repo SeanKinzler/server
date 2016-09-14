@@ -12,7 +12,8 @@ var User = sequelize.define('user', {
 var Entry = sequelize.define('entry', {
   text: Sequelize.STRING,
   location: Sequelize.STRING,
-  filepath: Sequelize.STRING
+  filepath: Sequelize.STRING,
+  thumbnail: Sequelize.STRING
 });
 
 var Relationships = sequelize.define('relationships', {
