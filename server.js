@@ -13,8 +13,6 @@ pg.connect(process.env.DATABSE_URL, function(err, client) {
     console.log('error connection pg: ', err)
   }
   console.log('connected pg! changes');
-  // client
-  //test
 })
 
 app.listen(port, function(){
