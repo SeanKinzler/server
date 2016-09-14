@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Ovid2020/server#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "easyimage": "^2.1.0",
     "express": "^4.14.0",
     "jwt-simple": "^0.5.0",
     "localtunnel": "^1.8.1",
