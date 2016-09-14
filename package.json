@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Ovid2020/server#readme",
   "dependencies": {
+    "aws-sdk": "^2.6.2",
     "body-parser": "^1.15.2",
     "easyimage": "^2.1.0",
     "express": "^4.14.0",
