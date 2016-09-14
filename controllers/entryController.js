@@ -1,6 +1,7 @@
 var fs = require('fs');
 var writeFile = require('write');
 var multiparty = require('multiparty');
+var easyimg = require('easyimage');
 
 var db = require('../models/Database.js');
 
@@ -24,20 +25,37 @@ module.exports = {
         if (files.file) {
           var temppath = files.file[0].path;
           var filename = files.file[0].originalFilename;
-          var filepath = 'static/uploads/' + filename;
+          var filedir = 'static/uploads/';
+          var filepath = filedir + filename;
           fs.readFile(temppath, function(err, data) {
             if (err) {
               reject(err)
             }
+            // 'writeFile' module creates unexisting intermediary directories
+            // while 'fs.writeFile' does not
             writeFile(filepath, data, function(err, data) {
               if (err) {
                 reject(err);
               }
+              // add filepath to entry object
               entry.filepath = filepath;
-              resolve(entry);
-            })
-          })
+              // resize image
+              easyimg.rescrop({
+                 src: filepath, 
+                 // prepend 'thumb_' to thumbnail filename
+                 dst: filedir + 'thumb_' + filename,
+                 width:60, 
+                 height:60,
+              }) // end rescrop
+              .then((image) => {
+                // add thumbnail path to entry object
+                entry.thumbnail = image.path;
+                resolve(entry);
+              })
+            }) // end writeFile
+          })// end fs.readFile
         } else {
+          // if no files resolve here
           resolve(entry);
         }
       }) // end form.parse
