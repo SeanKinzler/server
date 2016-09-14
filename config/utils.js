@@ -1,4 +1,5 @@
 var jwt = require('jwt-simple');
+var aws = require('./aws.js');
 
 module.exports = {
   decode: function (req, res, next) {
@@ -19,5 +20,27 @@ module.exports = {
       return next(error);
     }
 
+  },
+  uploadToS3: function(filepath, data) {
+    
+    var s3 = new aws.S3();
+
+    var params = {
+      Bucket: 'broadcast10', 
+      ACL: 'public-read',
+      Key: filepath, 
+      Body: data
+    };            
+
+    s3.putObject(params, function(err, data) {
+      if (err) {
+        throw Error(err);
+      } else {
+        console.log("Successfully uploaded data to S3:", data);  
+      } 
+    });
+
+    return aws.config.baseUrl + filepath;
+  
   }
 };
