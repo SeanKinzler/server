@@ -1,18 +1,60 @@
+var fs = require('fs');
+var writeFile = require('write');
+var multiparty = require('multiparty');
+
 var db = require('../models/Database.js');
 
 module.exports = {
 
   createEntry: function(req, res, next){
-    var query = req.body;
-    query['userId'] = req.user.id;
 
-    db.Entry.create(query)
-      .then(function(newEntry) {
-        res.send('Success');
+    var form = new multiparty.Form();
+
+    new Promise((resolve, reject) => {
+      
+      // initialize entry object with userId
+      var entry = {userId: req.user.id};
+
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+        }
+        entry.text = fields.text[0];
+        entry.location = fields.location[0];
+        if (files.file) {
+          var temppath = files.file[0].path;
+          var filename = files.file[0].originalFilename;
+          var filepath = 'static/uploads/' + filename;
+          fs.readFile(temppath, function(err, data) {
+            if (err) {
+              reject(err)
+            }
+            writeFile(filepath, data, function(err, data) {
+              if (err) {
+                reject(err);
+              }
+              entry.filepath = filepath;
+              resolve(entry);
+            })
+          })
+        } else {
+          resolve(entry);
+        }
+      }) // end form.parse
+    }) // end Promise
+    .then((entry) => {
+      db.Entry.create(entry)
+      .then((newEntry) => {
+        res.json(newEntry);
       })
-      .catch(function(err){
-        res.status(404).json(err)
+      .catch((err) => {
+        res.status(500).json(err);
       })
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    })
+
   },
 
   getEntries: function(req, res, next) {
