@@ -17,18 +17,18 @@ module.exports = {
       
       // initialize entry object with userId
       var entry = {userId: req.user.id};
-
       form.parse(req, (err, fields, files) => {
         if (err) {
+        console.log('err: ', err);
           reject(err);
         }
         // Store entry text and location on entry object
         entry.text = fields.text[0];
         entry.location = fields.location[0];
-        
+
         if (files.file) {
           var temppath = files.file[0].path;
-          var filename = files.file[0].originalFilename;
+          var filename = '' + req.user.id + '/' + Date.now() +'.jpg'
           // Build file paths
           var filedir = 'uploads/';
           var filepath = filedir + filename;
