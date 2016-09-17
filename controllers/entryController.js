@@ -25,9 +25,10 @@ module.exports = {
         // Store entry text and location on entry object
         entry.text = fields.text[0];
         entry.location = fields.location[0];
-
+        console.log('both files: ', files.file)
         if (files.file) {
           var temppath = files.file[0].path;
+          console.log('tempPath: ', temppath)
           var filename = '' + req.user.id + '/' + Date.now() +'.jpg'
           // Build file paths
           var filedir = 'uploads/';
